@@ -67,16 +67,34 @@ fn main() {
         _ => args.days,
     };
 
-    for day in days {
+    let mut total_time = 0;
+
+    for day in days.clone() {
         let day_str = format!("{:0>2}", day);
         if args.get {
             get::get(day, year, &cookie);
             continue;
         }
-        if let Some((p1, p2)) = run::run_day(&day_str, args.example) {
+        if let Some((p1, p2, time)) = run::run_day(&day_str, args.example) {
+            total_time += time;
             if args.post {
                 post::post(day, year, args.example, &cookie, &p1, &p2);
             }
         }
+    }
+
+    print!("\x1b[4;1m");
+    let days_completed = days.len();
+    if days_completed == 25 {
+        println!(
+            "🎄 All days completed! 🎄 Total time: {}ms\x1b[0m",
+            total_time / 1000
+        );
+    } else if days_completed > 1 {
+        println!(
+            "{} days completed in {}ms\x1b[0m",
+            days_completed,
+            total_time / 1000
+        );
     }
 }

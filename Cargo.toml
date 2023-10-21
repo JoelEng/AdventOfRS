@@ -2,6 +2,10 @@
 name = "aors"
 version = "0.1.0"
 edition = "2021"
+repository = "https://github.com/JoelEng/AdventOfRS"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+description = "Useful rs tools for Advent of Code"
 
 [lib]
 proc-macro = true

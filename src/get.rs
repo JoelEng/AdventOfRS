@@ -1,6 +1,14 @@
 use std::fs;
 use std::io::ErrorKind;
 
+const TEMPLATE: &str = "mod helpers;
+
+#[aors::main]
+fn main(input: &str) -> (i32, i32) {{
+    (0, 0)
+}}
+";
+
 pub fn get(day: u8, year: u32, cookie: &str) {
     let url = format!("https://adventofcode.com/{}/day/{}/input", year, day);
     let day = format!("{:0>2}", day);
@@ -8,7 +16,7 @@ pub fn get(day: u8, year: u32, cookie: &str) {
     mkdir("inputs");
     mkdir("input_examples");
     mkdir("answers");
-    mkdir("src/bin");
+    mkdir("src/bin/helpers");
 
     let input = get_req(&url, cookie).expect("Failed to fetch input");
     println!("{}", input);
@@ -35,8 +43,13 @@ pub fn get(day: u8, year: u32, cookie: &str) {
     );
     touch(
         &format!("src/bin/{}.rs", day),
-        &template(&day),
+        TEMPLATE,
         "failed to create <DAY>.rs file",
+    );
+    touch(
+        "src/bin/helpers/mod.rs",
+        "",
+        "failed to create helpers module",
     );
 }
 
@@ -61,15 +74,4 @@ fn touch(path: &str, contents: &str, error_msg: &str) {
     if let Err(_) = fs::File::open(path) {
         fs::write(path, contents).expect(error_msg);
     }
-}
-
-fn template(day: &str) -> String {
-    return format!(
-        "#[aors::main({})]
-fn main(input: &str) -> (i32, i32) {{
-    (0, 0)
-}}
-",
-        day
-    );
 }

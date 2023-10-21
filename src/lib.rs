@@ -1,21 +1,9 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, AttributeArgs, Ident, ItemFn, Lit, NestedMeta};
+use syn::{parse_macro_input, Ident, ItemFn};
 
 #[proc_macro_attribute]
-pub fn main(args: TokenStream, input: TokenStream) -> TokenStream {
-    let day;
-    let (input_path, example_path) = match &parse_macro_input!(args as AttributeArgs)[..] {
-        [NestedMeta::Lit(Lit::Int(lit_day))] => {
-            day = lit_day.token().to_string();
-            (
-                format!("../../inputs/{}.in", day),
-                format!("../../input_examples/{}.in", day),
-            )
-        }
-        _ => panic!("Expected one integer argument"),
-    };
-
+pub fn main(_: TokenStream, input: TokenStream) -> TokenStream {
     let mut aoc_solution = parse_macro_input!(input as ItemFn);
     aoc_solution.sig.ident = Ident::new("aoc_solution", aoc_solution.sig.ident.span());
 
@@ -36,27 +24,26 @@ pub fn main(args: TokenStream, input: TokenStream) -> TokenStream {
         }
       }
 
-      const INPUT: &str = include_str!(#input_path);
-      const EXAMPLE_INPUT: &str = include_str!(#example_path);
       #aoc_solution
       fn main() {
         let args: Vec<String> = std::env::args().collect();
         let mut example_input = false;
-        let mut input = INPUT;
-        if let Some(a) = args.get(1) {
+        let day = args.get(1).unwrap();
+        let mut input = format!("../../inputs/{}.in", day);
+        if let Some(a) = args.get(2) {
           if a == "example" {
             example_input = true;
-            input = EXAMPLE_INPUT;
+            input = format!("../../input_examples/{}.in", day);
           }
         }
+        println!("\x1b[4;1mDay {}:\x1b[0m", day);
 
-        println!("\x1b[4;1mDay {}:\x1b[0m", #day);
         let now = ::std::time::Instant::now();
         let (p1, p2) = aoc_solution(input.trim_end());
         let time = now.elapsed();
 
-        let ans1 = std::fs::read_to_string(format!("answers/{}p1.sol", #day)).expect("unable to find answer file");
-        let ans2 = std::fs::read_to_string(format!("answers/{}p2.sol", #day)).expect("unable to find answer file");
+        let ans1 = std::fs::read_to_string(format!("answers/{}p1.sol", day)).expect("unable to find answer file");
+        let ans2 = std::fs::read_to_string(format!("answers/{}p2.sol", day)).expect("unable to find answer file");
 
         print!("Part one: ");
         if ans1 != "" && !example_input {
