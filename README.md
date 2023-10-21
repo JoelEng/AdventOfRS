@@ -1,4 +1,4 @@
-# aors - Advent of RS :christmas_tree: :crab:
+# aors - Advent of RS 🎄 🦀
 
 Useful rs tools for Advent of Code.
 

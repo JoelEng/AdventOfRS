@@ -1,5 +1,4 @@
 use std::fs;
-use std::io::ErrorKind;
 
 const TEMPLATE: &str = "mod helpers;
 
@@ -12,11 +11,6 @@ fn main(input: &str) -> (i32, i32) {{
 pub fn get(day: u8, year: u32, cookie: &str) {
     let url = format!("https://adventofcode.com/{}/day/{}/input", year, day);
     let day = format!("{:0>2}", day);
-
-    mkdir("inputs");
-    mkdir("input_examples");
-    mkdir("answers");
-    mkdir("src/bin/helpers");
 
     let input = get_req(&url, cookie).expect("Failed to fetch input");
     println!("{}", input);
@@ -51,14 +45,6 @@ pub fn get(day: u8, year: u32, cookie: &str) {
         "",
         "failed to create helpers module",
     );
-}
-
-fn mkdir(path: &str) {
-    if let Err(a) = std::fs::create_dir_all(path) {
-        if a.kind() != ErrorKind::AlreadyExists {
-            eprintln!("\x1b[31m{}\x1b[0m", a);
-        }
-    }
 }
 
 fn get_req(url: &str, cookie: &str) -> Result<String, ureq::Error> {
