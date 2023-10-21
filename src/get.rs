@@ -40,11 +40,6 @@ pub fn get(day: u8, year: u32, cookie: &str) {
         TEMPLATE,
         "failed to create <DAY>.rs file",
     );
-    touch(
-        "src/bin/helpers/mod.rs",
-        "",
-        "failed to create helpers module",
-    );
 }
 
 fn get_req(url: &str, cookie: &str) -> Result<String, ureq::Error> {
