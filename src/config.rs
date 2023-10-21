@@ -1,3 +1,5 @@
+use std::process::exit;
+
 use confy;
 use filenamify::filenamify;
 use serde::{Deserialize, Serialize};
@@ -32,13 +34,22 @@ pub fn config(year: Option<u32>, cookie: Option<String>) -> (u32, String) {
         confy::store(CONFY_NAME, None, &cookie_config).unwrap();
     }
 
-    if year_config.year == 0 {
-        println!("Please enter a year. aors -h for more help.")
-    }
-
-    if cookie_config.cookie == "" {
-        println!("Please enter an aoc session cookie. aors -h for more help.")
-    }
+    missing_config_msg(year_config.year, &cookie_config.cookie);
 
     (year_config.year, cookie_config.cookie)
+}
+
+fn missing_config_msg(year: u32, cookie: &str) {
+    if year == 0 {
+        println!(
+            "Please enter the year you want to solve for:\n\t\x1b[1maors --year\x1b[0m <YEAR>\n"
+        );
+    }
+    if cookie == "" {
+        println!("Please enter a session cookie:\n\t\x1b[1maors --cookie\x1b[0m <COOKIE>");
+        println!("This cookie is acquired like so: https://github.com/wimglenn/advent-of-code-wim/issues/1\n");
+    }
+    if year == 0 || cookie == "" {
+        exit(1);
+    }
 }

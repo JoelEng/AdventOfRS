@@ -1,5 +1,7 @@
 use clap::Parser;
 mod config;
+mod get;
+mod post;
 
 /// Useful rs tools for Advent of Code
 #[derive(Parser, Debug)]
@@ -10,6 +12,12 @@ struct Args {
     /// Run with example input
     #[arg(short = 'x', long)]
     example: bool,
+    /// Retrieve input data and create files for [DAYS]
+    #[arg(short, long)]
+    get: bool,
+    /// Post solution for given days to https://adventofcode.com/<YEAR>
+    #[arg(short, long)]
+    post: bool,
     /// Print year and session cookie
     #[arg(short, long)]
     info: bool,
@@ -23,7 +31,6 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-
     let (year, cookie) = config::config(args.year, args.cookie);
 
     if args.info {
@@ -36,7 +43,14 @@ fn main() {
         println!("\x1b[103;30m   USING EXAMPLE INPUT   \x1b[0m");
     }
 
-    for d in args.days {
-        println!("DAY: {}", d);
+    for day in args.days {
+        if args.get {
+            get::get(day, year, &cookie);
+            continue;
+        }
+        if args.post {
+            post::post(day, year, args.example);
+        }
+        // println!("DAY: {}", day);
     }
 }
