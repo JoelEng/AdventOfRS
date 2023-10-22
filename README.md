@@ -14,8 +14,6 @@ aors --cookie <COOKIE>  # Set session cookie
 
 COOKIE is your session cookie, acquired from the advent of code website [like this](https://github.com/wimglenn/advent-of-code-wim/issues/1).
 
-There is a risk that the dependency is not added correctly to the project. If so, just add it manually in `Cargo.toml`
-
 The first command after this can take some time without output. This is completely normal.
 
 ## Usage
@@ -40,7 +38,7 @@ The puzzles sometimes require that different variables be used for the example p
 
 ## Helper functions
 
-If a function is needed in multiple days, it should be placed in the `helpers` subcrate.
+If a function is needed in multiple days, it should be placed in the `helpers` folder.
 
 ##
 
