@@ -1,7 +1,7 @@
 use std::ffi::OsStr;
-use std::io::{ErrorKind, Write};
+use std::fs;
+use std::io::ErrorKind;
 use std::{error::Error, process::Command};
-use std::{fs, io};
 
 const GITIGNORE: &str = "
 # Eric Wastl wishes for users not to share their puzzle input
@@ -39,6 +39,8 @@ pub fn init() -> Result<(), Box<dyn Error>> {
 
     touch(".gitignore", GITIGNORE, "failed to create .gitignore");
 
+    touch("src/main.rs", "fn main() {}", "failed to create main.rs");
+
     Ok(())
 }
 
@@ -49,10 +51,9 @@ where
 {
     let cmd = Command::new(cmd)
         .args(args)
-        .output()
+        .spawn()
         .expect("failed to run command");
-    io::stdout().write_all(&cmd.stdout).unwrap();
-    io::stderr().write_all(&cmd.stderr).unwrap();
+    cmd.wait_with_output().expect("failed to run command");
 }
 
 fn mkdir(path: &str) {

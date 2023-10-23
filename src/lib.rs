@@ -29,13 +29,15 @@ pub fn main(_: TokenStream, input: TokenStream) -> TokenStream {
         let args: Vec<String> = std::env::args().collect();
         let mut example_input = false;
         let day = args.get(1).unwrap();
-        let mut input = format!("../../inputs/{}.in", day);
+        let mut input_file = format!("inputs/{}.in", day);
         if let Some(a) = args.get(2) {
           if a == "example" {
             example_input = true;
-            input = format!("../../input_examples/{}.in", day);
+            input_file = format!("input_examples/{}.in", day);
           }
         }
+        let input = &std::fs::read_to_string(&input_file).expect(&format!("failed to read input from {}", input_file));
+        let input = input.as_str();
         println!("\x1b[4;1mDay {}:\x1b[0m", day);
 
         let now = ::std::time::Instant::now();
@@ -45,7 +47,7 @@ pub fn main(_: TokenStream, input: TokenStream) -> TokenStream {
         let ans1 = std::fs::read_to_string(format!("answers/{}p1.sol", day)).expect("unable to find answer file");
         let ans2 = std::fs::read_to_string(format!("answers/{}p2.sol", day)).expect("unable to find answer file");
 
-        print!("Part one: ");
+        print!("Part 1: ");
         if ans1 != "" && !example_input {
           if ans1 == p1.to_string() {
             print!("\x1b[32m");
@@ -55,7 +57,7 @@ pub fn main(_: TokenStream, input: TokenStream) -> TokenStream {
         }
         println!("{}\x1b[0m", p1);
 
-        print!("Part two: ");
+        print!("Part 2: ");
         if ans2 != "" && !example_input {
           if ans2 == p2.to_string() {
             print!("\x1b[32m");

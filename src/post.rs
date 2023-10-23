@@ -1,4 +1,3 @@
-use dotenv::dotenv;
 use fancy_regex::Regex;
 use std::fs;
 use std::path::Path;
@@ -10,7 +9,6 @@ const ALREADY_DONE: &str = r"(You don't seem to be solving.*\.)";
 const CORRECT: &str = "(That's the right answer!)";
 
 pub fn post(day: u8, year: u32, example_input: bool, cookie: &str, p1: &str, p2: &str) {
-    dotenv().ok();
     let day_str = format!("{:0>2}", day);
 
     if day < 1 || day > 25 {

@@ -3,9 +3,9 @@ use std::fs;
 const TEMPLATE: &str = "mod helpers;
 
 #[aors::main]
-fn main(input: &str) -> (i32, i32) {{
+fn main(input: &str) -> (i32, i32) {
     (0, 0)
-}}
+}
 ";
 
 pub fn get(day: u8, year: u32, cookie: &str) {

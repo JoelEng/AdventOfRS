@@ -1,5 +1,4 @@
 use fancy_regex::Regex;
-use std::io::{self, Write};
 use std::{error::Error, process::Command};
 
 pub fn run_day(day_str: &str, example_input: bool) -> Option<(String, String, usize)> {
@@ -10,9 +9,8 @@ pub fn run_day(day_str: &str, example_input: bool) -> Option<(String, String, us
         args.push("example");
     }
 
-    let cmd = Command::new("cargo").args(args).output().ok()?;
-    io::stdout().write_all(&cmd.stdout).unwrap();
-    io::stderr().write_all(&cmd.stderr).unwrap();
+    let cmd = Command::new("cargo").args(args).spawn().ok()?;
+    let cmd = cmd.wait_with_output().ok()?;
     let output = String::from_utf8(cmd.stdout).ok()?;
 
     let p1 = get_answer(part_one, &output)?;
