@@ -3,9 +3,11 @@ use std::fs;
 use std::io::{BufRead, BufReader, ErrorKind};
 use std::process::{Command, Stdio};
 
+use crate::ANSWER_FOLDER;
+
 /// Save an answer to the specified day & part
 pub fn save_answer(day_str: &str, part: i32, answer: &str) {
-    let ans_path = format!("answers/{}p{}.sol", day_str, part);
+    let ans_path = format!("{}/{}p{}.sol", ANSWER_FOLDER, day_str, part);
     write(&ans_path, answer, "could not save answer to answers file");
 }
 

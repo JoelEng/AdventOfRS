@@ -1,4 +1,5 @@
 use crate::commands::save_answer;
+use crate::ANSWER_FOLDER;
 use fancy_regex::Regex;
 use std::path::Path;
 use std::process::exit;
@@ -21,9 +22,9 @@ pub fn post(day: u8, year: u32, example_input: bool, cookie: &str, p1: &str, p2:
         exit(1);
     }
 
-    let ans1 = std::fs::read_to_string(format!("answers/{}p1.sol", day_str))
+    let ans1 = std::fs::read_to_string(format!("{}/{}p1.sol", ANSWER_FOLDER, day_str))
         .expect("unable to find answer file");
-    let ans2 = std::fs::read_to_string(format!("answers/{}p2.sol", day_str))
+    let ans2 = std::fs::read_to_string(format!("{}/{}p2.sol", ANSWER_FOLDER, day_str))
         .expect("unable to find answer file");
 
     let part = if ans1 == "" { 1 } else { 2 };

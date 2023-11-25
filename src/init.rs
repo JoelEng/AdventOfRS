@@ -1,4 +1,5 @@
 use crate::commands::{cmd, mkdir, touch};
+use crate::ANSWER_FOLDER;
 use std::error::Error;
 use std::fs;
 
@@ -27,7 +28,7 @@ pub fn init() -> Result<(), Box<dyn Error>> {
 
     mkdir("inputs");
     mkdir("input_examples");
-    mkdir("answers");
+    mkdir(ANSWER_FOLDER);
     mkdir("src/bin/helpers");
 
     touch(

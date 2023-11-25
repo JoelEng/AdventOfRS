@@ -1,5 +1,7 @@
 use std::fs;
 
+use crate::ANSWER_FOLDER;
+
 const TEMPLATE: &str = "mod helpers;
 
 #[aors::main]
@@ -26,12 +28,12 @@ pub fn get(day: u8, year: u32, cookie: &str) {
         "failed to write input to file",
     );
     touch(
-        &format!("answers/{}p1.sol", day),
+        &format!("{}/{}p1.sol", ANSWER_FOLDER, day),
         "",
         "failed to create answer file",
     );
     touch(
-        &format!("answers/{}p2.sol", day),
+        &format!("{}/{}p2.sol", ANSWER_FOLDER, day),
         "",
         "failed to create answer file",
     );

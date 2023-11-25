@@ -6,6 +6,9 @@ mod init;
 mod post;
 mod run;
 
+// Also needs to be changed in lib.rs
+const ANSWER_FOLDER: &str = ".answers";
+
 /// Useful rs tools for Advent of Code
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -33,7 +36,7 @@ struct Args {
     /// Print year and session cookie
     #[arg(short, long)]
     info: bool,
-    /// Saves answers to both parts to /answers/ folder. This is done automatically when posting an answer, but can be done manually as well.
+    /// Saves answers. This is done automatically when posting an answer, but can be done manually as well.
     #[arg(short, long)]
     save_answers: bool,
 }
@@ -97,7 +100,7 @@ fn main() {
     let days_completed = days.len();
     if days_completed == 25 {
         println!(
-            "🎄 All days completed! 🎄 Total time: {}ms\x1b[0m",
+            "\n🎄 All days completed! 🎄 Total time: {}ms\x1b[0m",
             total_time / 1000
         );
     } else if days_completed > 1 {

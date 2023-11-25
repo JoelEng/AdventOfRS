@@ -44,8 +44,8 @@ pub fn main(_: TokenStream, input: TokenStream) -> TokenStream {
         let (p1, p2) = aoc_solution(input.trim_end());
         let time = now.elapsed();
 
-        let ans1 = std::fs::read_to_string(format!("answers/{}p1.sol", day)).unwrap_or("".to_string());
-        let ans2 = std::fs::read_to_string(format!("answers/{}p2.sol", day)).unwrap_or("".to_string());
+        let ans1 = std::fs::read_to_string(format!(".answers/{}p1.sol", day)).unwrap_or("".to_string());
+        let ans2 = std::fs::read_to_string(format!(".answers/{}p2.sol", day)).unwrap_or("".to_string());
 
         print!("Part 1: ");
         if ans1 != "" && !example_input {
