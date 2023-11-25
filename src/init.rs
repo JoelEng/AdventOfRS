@@ -1,7 +1,6 @@
-use std::ffi::OsStr;
+use crate::commands::{cmd, mkdir, touch};
+use std::error::Error;
 use std::fs;
-use std::io::ErrorKind;
-use std::{error::Error, process::Command};
 
 const GITIGNORE: &str = "
 # Eric Wastl wishes for users not to share their puzzle input
@@ -33,7 +32,7 @@ pub fn init() -> Result<(), Box<dyn Error>> {
 
     touch(
         "src/bin/helpers/mod.rs",
-        "",
+        "#[allow(dead_code)]",
         "failed to create helpers module",
     );
 
@@ -42,30 +41,4 @@ pub fn init() -> Result<(), Box<dyn Error>> {
     touch("src/main.rs", "fn main() {}", "failed to create main.rs");
 
     Ok(())
-}
-
-fn cmd<I, S>(cmd: &str, args: I)
-where
-    I: IntoIterator<Item = S>,
-    S: AsRef<OsStr>,
-{
-    let cmd = Command::new(cmd)
-        .args(args)
-        .spawn()
-        .expect("failed to run command");
-    cmd.wait_with_output().expect("failed to run command");
-}
-
-fn mkdir(path: &str) {
-    if let Err(a) = fs::create_dir_all(path) {
-        if a.kind() != ErrorKind::AlreadyExists {
-            eprintln!("\x1b[31m{}\x1b[0m", a);
-        }
-    }
-}
-
-fn touch(path: &str, contents: &str, error_msg: &str) {
-    if let Err(_) = fs::File::open(path) {
-        fs::write(path, contents).expect(error_msg);
-    }
 }

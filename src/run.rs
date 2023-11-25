@@ -1,17 +1,20 @@
+use crate::commands;
 use fancy_regex::Regex;
-use std::{error::Error, process::Command};
+use std::error::Error;
 
-pub fn run_day(day_str: &str, example_input: bool) -> Option<(String, String, usize)> {
-    let part_one: Regex = Regex::new(r"Part one: ([^\n]+)").ok()?;
-    let part_two: Regex = Regex::new(r"Part two: ([^\n]+)").ok()?;
-    let mut args = vec!["run", "--release", "--bin", day_str, day_str];
+pub fn run_day(day_str: &str, example_input: bool, quiet: bool) -> Option<(String, String, usize)> {
+    let part_one: Regex = Regex::new(r"Part 1: ([^\n]+)").ok()?;
+    let part_two: Regex = Regex::new(r"Part 2: ([^\n]+)").ok()?;
+    let mut args = vec!["run"];
+    if quiet {
+        args.push("--quiet");
+    }
+    args.append(&mut vec!["--release", "--bin", day_str, day_str]);
     if example_input {
         args.push("example");
     }
 
-    let cmd = Command::new("cargo").args(args).spawn().ok()?;
-    let cmd = cmd.wait_with_output().ok()?;
-    let output = String::from_utf8(cmd.stdout).ok()?;
+    let output = commands::cmd("cargo", args)?;
 
     let p1 = get_answer(part_one, &output)?;
     let p2 = get_answer(part_two, &output)?;

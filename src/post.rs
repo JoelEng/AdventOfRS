@@ -1,5 +1,5 @@
+use crate::commands::save_answer;
 use fancy_regex::Regex;
-use std::fs;
 use std::path::Path;
 use std::process::exit;
 
@@ -66,11 +66,7 @@ pub fn post(day: u8, year: u32, example_input: bool, cookie: &str, p1: &str, p2:
     if let Ok(c) = corr_re.captures(&html) {
         if let Some(c) = c {
             println!("\x1b[102;30m{}\x1b[0m", c.get(1).unwrap().as_str());
-            if part == 1 {
-                write_ans(&day_str, answer, "one".to_string());
-            } else {
-                write_ans(&day_str, answer, "two".to_string());
-            }
+            save_answer(&day_str, part, answer);
         }
     }
 }
@@ -85,20 +81,4 @@ fn post_req(year: u32, day: u8, answer: &str, part: i32, cookie: &str) -> String
     .unwrap()
     .into_string()
     .unwrap()
-}
-
-fn write_ans(day_str: &str, answer: &str, part_string: String) {
-    let ans_path = format!("answers/{}.sol", day_str);
-    let ans_file = fs::read_to_string(&ans_path).unwrap();
-    let re = Regex::new(&(format!("part {}: ", part_string).to_owned() + r"([^\n]*)")).unwrap();
-    let new_ans_file = re
-        .replace(
-            &ans_file,
-            format!("part {}: {}", part_string, answer).as_str(),
-        )
-        .to_string();
-    let ansi_escape = Regex::new(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])").unwrap();
-    let new_ans_file = ansi_escape.replace_all(&new_ans_file, "").to_string();
-
-    fs::write(&ans_path, new_ans_file).unwrap();
 }

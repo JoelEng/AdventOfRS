@@ -1,4 +1,5 @@
 use clap::Parser;
+mod commands;
 mod config;
 mod get;
 mod init;
@@ -23,19 +24,23 @@ struct Args {
     /// Post solution for given days to https://adventofcode.com/<YEAR>
     #[arg(short, long)]
     post: bool,
-    /// Print year and session cookie
-    #[arg(short, long)]
-    info: bool,
     /// Set year to solve
     #[arg(long)]
     year: Option<u32>,
     /// Set session cookie, acquired like so: https://github.com/wimglenn/advent-of-code-wim/issues/1
     #[arg(long)]
     cookie: Option<String>,
+    /// Print year and session cookie
+    #[arg(short, long)]
+    info: bool,
+    /// Saves answers to both parts to /answers/ folder. This is done automatically when posting an answer, but can be done manually as well.
+    #[arg(short, long)]
+    save_answers: bool,
 }
 
 fn main() {
     let args = Args::parse();
+    let mut quiet = false;
 
     if args.init {
         init::init().ok();
@@ -56,6 +61,7 @@ fn main() {
 
     let days = match args.days.len() {
         0 => {
+            quiet = true;
             let mut d: Vec<u8> = std::fs::read_dir("src/bin/")
                 .unwrap()
                 .filter_map(|p| p.ok()?.path().file_stem()?.to_str().map(str::to_string))
@@ -75,10 +81,14 @@ fn main() {
             get::get(day, year, &cookie);
             continue;
         }
-        if let Some((p1, p2, time)) = run::run_day(&day_str, args.example) {
+        if let Some((p1, p2, time)) = run::run_day(&day_str, args.example, quiet) {
             total_time += time;
             if args.post {
                 post::post(day, year, args.example, &cookie, &p1, &p2);
+            }
+            if args.save_answers {
+                commands::save_answer(&day_str, 1, &p1);
+                commands::save_answer(&day_str, 2, &p2);
             }
         }
     }
