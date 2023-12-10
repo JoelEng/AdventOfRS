@@ -47,6 +47,7 @@ fn main() {
 
     if args.init {
         init::init().ok();
+        println!("\x1b[1mCreated Advent of Code project. Use \x1b[4maors -g 01\x1b[0;1m to fetch input for day 01");
         return;
     }
 

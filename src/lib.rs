@@ -12,7 +12,7 @@ pub fn main(_: TokenStream, input: TokenStream) -> TokenStream {
       fn phi<T>(actual: T, example: T) -> T {
         let args: Vec<String> = std::env::args().collect();
         let mut example_input = false;
-        if let Some(a) = args.get(1) {
+        if let Some(a) = args.get(2) {
           if a == "example" {
             example_input = true;
           }
