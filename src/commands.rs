@@ -55,7 +55,6 @@ pub fn write(path: &str, contents: &str, error_msg: &str) {
 
 /// Create a directory if it does not already exist
 pub fn mkdir(path: &str) {
-    println!("mkdir");
     if let Err(a) = fs::create_dir_all(path) {
         if a.kind() != ErrorKind::AlreadyExists {
             eprintln!("\x1b[31m{}\x1b[0m", a);
