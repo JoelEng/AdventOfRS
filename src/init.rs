@@ -19,6 +19,14 @@ Cargo.lock
 **/*.rs.bk
 ";
 
+const HELPERS_RS: &str = "
+#[allow(dead_code)]
+
+fn helper() {
+    // use this file to create functions that you want to re-use for different days.
+}
+";
+
 pub fn init() -> Result<(), Box<dyn Error>> {
     cmd("cargo", &["init"]);
     cmd("cargo", &["add", "aors"]);
@@ -30,7 +38,7 @@ pub fn init() -> Result<(), Box<dyn Error>> {
 
     touch(
         "src/bin/helpers/mod.rs",
-        "#[allow(dead_code)]",
+        HELPERS_RS,
         "failed to create helpers module",
     );
     touch(".gitignore", GITIGNORE, "failed to create .gitignore");
