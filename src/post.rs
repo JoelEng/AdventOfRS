@@ -52,7 +52,7 @@ pub fn post(day: u8, year: u32, example_input: bool, cookie: &str, p1: &str, p2:
         answer, day_str, part, year
     );
 
-    let html = post_req(year, day, answer, part, cookie);
+    let html = post_req(year, day, answer, part, cookie).expect("html request failed");
 
     for err in [TOO_FAST, INCORRECT, ALREADY_DONE] {
         let err_re = Regex::new(err).unwrap();
@@ -72,14 +72,12 @@ pub fn post(day: u8, year: u32, example_input: bool, cookie: &str, p1: &str, p2:
     }
 }
 
-fn post_req(year: u32, day: u8, answer: &str, part: i32, cookie: &str) -> String {
-    ureq::post(&format!(
+fn post_req(year: u32, day: u8, answer: &str, part: i32, cookie: &str) -> Result<String, ureq::Error> {
+    let res = ureq::post(&format!(
         "https://adventofcode.com/{}/day/{}/answer",
         year, day
     ))
-    .set("Cookie", &format!("session={}", cookie))
-    .send_form(&[("answer", answer), ("level", &part.to_string())])
-    .unwrap()
-    .into_string()
-    .unwrap()
+    .header("Cookie", &format!("session={}", cookie))
+    .send_form([("answer", answer), ("level", &part.to_string())])?;
+    res.into_body().read_to_string()
 }

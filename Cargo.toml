@@ -1,7 +1,7 @@
 [package]
 name = "aors"
-version = "0.4.0"
-edition = "2021"
+version = "0.5.0"
+edition = "2024"
 repository = "https://github.com/JoelEng/AdventOfRS"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
@@ -11,16 +11,16 @@ description = "Useful rs tools for Advent of Code"
 proc-macro = true
 
 [dependencies]
-clap = { version = "4.4.6", features = ["derive"] }
-ureq = "2.5"
+clap = { version = "4.6", features = ["derive"] }
+ureq = "3.3"
 
 # config.rs dependencies
-confy = "0.5.1"
+confy = "2.0"
 serde = { version = "1.0", features = ["derive"] }
 filenamify = "0.1"
 
 # post.rs dependencies
-fancy-regex = "0.11"
+fancy-regex = "0.18"
 
 # lib proc-macro dependencies
 syn = "2.0"

@@ -1,7 +1,6 @@
 use crate::commands::{cmd, mkdir, touch};
 use crate::ANSWER_FOLDER;
 use std::error::Error;
-use std::fs;
 
 const GITIGNORE: &str = "
 # Eric Wastl wishes for users not to share their puzzle input
@@ -23,8 +22,6 @@ Cargo.lock
 pub fn init() -> Result<(), Box<dyn Error>> {
     cmd("cargo", &["init"]);
     cmd("cargo", &["add", "aors"]);
-    fs::remove_file("src/main.rs")?;
-    fs::remove_file(".gitignore")?;
 
     mkdir("inputs");
     mkdir("input_examples");
@@ -36,10 +33,7 @@ pub fn init() -> Result<(), Box<dyn Error>> {
         "#[allow(dead_code)]",
         "failed to create helpers module",
     );
-
     touch(".gitignore", GITIGNORE, "failed to create .gitignore");
-
-    touch("src/main.rs", "fn main() {}", "failed to create main.rs");
 
     Ok(())
 }

@@ -67,7 +67,7 @@ fn main() {
         0 => {
             quiet = true;
             let mut d: Vec<u8> = std::fs::read_dir("src/bin/")
-                .unwrap()
+                .expect("Could not find src/bin/ dir")
                 .filter_map(|p| p.ok()?.path().file_stem()?.to_str().map(str::to_string))
                 .filter_map(|f| f.parse().ok())
                 .collect();
@@ -97,9 +97,10 @@ fn main() {
         }
     }
 
+    let max_days = if year < 2025 { 25 } else { 12 };
     print!("\x1b[4;1m");
     let days_completed = days.len();
-    if days_completed == 25 {
+    if days_completed == max_days {
         println!(
             "\n🎄 All days completed! 🎄 Total time: {}ms\x1b[0m",
             total_time / 1000

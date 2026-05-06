@@ -45,12 +45,11 @@ pub fn get(day: u8, year: u32, cookie: &str) {
 }
 
 fn get_req(url: &str, cookie: &str) -> Result<String, ureq::Error> {
-    let body = ureq::get(url)
-        .set("Accept", "text/plain")
-        .set("Cookie", &format!("session={}", cookie))
-        .send_form(&[("session", cookie)])?
-        .into_string()?;
-    Ok(body)
+    let res = ureq::post(url)
+        .header("Accept", "text/plain")
+        .header("Cookie", &format!("session={}", cookie))
+        .send_form([("session", cookie)])?;
+    res.into_body().read_to_string()
 }
 
 fn touch(path: &str, contents: &str, error_msg: &str) {
